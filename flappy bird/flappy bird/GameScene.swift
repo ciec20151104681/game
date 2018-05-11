@@ -31,6 +31,9 @@ class GameScene: SKScene {
     var dt: TimeInterval = 0
     
     
+    let 拍打的音效 = SKAction.playSoundFileNamed("flapping.wav", waitForCompletion: false)
+    
+    
     
     override func didMove(to view: SKView) {
         addChild(世界单位)
@@ -67,6 +70,7 @@ class GameScene: SKScene {
         速度 = CGPoint(x: 0, y: k上冲速度)
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        run(拍打的音效)
         主角飞一下()
     }
   
