@@ -14,6 +14,15 @@
 		71B75CA020A525FA002A82E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71B75C9E20A525FA002A82E7 /* Main.storyboard */; };
 		71B75CA220A525FB002A82E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71B75CA120A525FB002A82E7 /* Assets.xcassets */; };
 		71B75CA520A525FB002A82E7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71B75CA320A525FB002A82E7 /* LaunchScreen.storyboard */; };
+		71D6F28320A57062007B3B65 /* backgrounds.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F26C20A57062007B3B65 /* backgrounds.atlas */; };
+		71D6F28420A57062007B3B65 /* sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F26D20A57062007B3B65 /* sprites.atlas */; };
+		71D6F29120A57062007B3B65 /* coin.wav in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F27C20A57062007B3B65 /* coin.wav */; };
+		71D6F29220A57062007B3B65 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F27D20A57062007B3B65 /* ding.wav */; };
+		71D6F29320A57062007B3B65 /* falling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F27E20A57062007B3B65 /* falling.wav */; };
+		71D6F29420A57062007B3B65 /* flapping.wav in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F27F20A57062007B3B65 /* flapping.wav */; };
+		71D6F29520A57062007B3B65 /* hitGround.wav in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F28020A57062007B3B65 /* hitGround.wav */; };
+		71D6F29620A57062007B3B65 /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F28120A57062007B3B65 /* pop.wav */; };
+		71D6F29720A57062007B3B65 /* whack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 71D6F28220A57062007B3B65 /* whack.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +35,15 @@
 		71B75CA120A525FB002A82E7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		71B75CA420A525FB002A82E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		71B75CA620A525FB002A82E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71D6F26C20A57062007B3B65 /* backgrounds.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = backgrounds.atlas; sourceTree = "<group>"; };
+		71D6F26D20A57062007B3B65 /* sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = sprites.atlas; sourceTree = "<group>"; };
+		71D6F27C20A57062007B3B65 /* coin.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = coin.wav; sourceTree = "<group>"; };
+		71D6F27D20A57062007B3B65 /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
+		71D6F27E20A57062007B3B65 /* falling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = falling.wav; sourceTree = "<group>"; };
+		71D6F27F20A57062007B3B65 /* flapping.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flapping.wav; sourceTree = "<group>"; };
+		71D6F28020A57062007B3B65 /* hitGround.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitGround.wav; sourceTree = "<group>"; };
+		71D6F28120A57062007B3B65 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
+		71D6F28220A57062007B3B65 /* whack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whack.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +76,7 @@
 		71B75C9320A525FA002A82E7 /* flappy bird */ = {
 			isa = PBXGroup;
 			children = (
+				71D6F26A20A57062007B3B65 /* Resources */,
 				71B75C9420A525FA002A82E7 /* AppDelegate.swift */,
 				71B75C9620A525FA002A82E7 /* GameScene.sks */,
 				71B75C9A20A525FA002A82E7 /* GameScene.swift */,
@@ -68,6 +87,38 @@
 				71B75CA620A525FB002A82E7 /* Info.plist */,
 			);
 			path = "flappy bird";
+			sourceTree = "<group>";
+		};
+		71D6F26A20A57062007B3B65 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				71D6F26B20A57062007B3B65 /* Art */,
+				71D6F27B20A57062007B3B65 /* Sounds */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		71D6F26B20A57062007B3B65 /* Art */ = {
+			isa = PBXGroup;
+			children = (
+				71D6F26C20A57062007B3B65 /* backgrounds.atlas */,
+				71D6F26D20A57062007B3B65 /* sprites.atlas */,
+			);
+			path = Art;
+			sourceTree = "<group>";
+		};
+		71D6F27B20A57062007B3B65 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				71D6F27C20A57062007B3B65 /* coin.wav */,
+				71D6F27D20A57062007B3B65 /* ding.wav */,
+				71D6F27E20A57062007B3B65 /* falling.wav */,
+				71D6F27F20A57062007B3B65 /* flapping.wav */,
+				71D6F28020A57062007B3B65 /* hitGround.wav */,
+				71D6F28120A57062007B3B65 /* pop.wav */,
+				71D6F28220A57062007B3B65 /* whack.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,10 +180,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71D6F29720A57062007B3B65 /* whack.wav in Resources */,
 				71B75CA020A525FA002A82E7 /* Main.storyboard in Resources */,
+				71D6F29120A57062007B3B65 /* coin.wav in Resources */,
 				71B75C9720A525FA002A82E7 /* GameScene.sks in Resources */,
+				71D6F28320A57062007B3B65 /* backgrounds.atlas in Resources */,
 				71B75CA220A525FB002A82E7 /* Assets.xcassets in Resources */,
+				71D6F29520A57062007B3B65 /* hitGround.wav in Resources */,
+				71D6F29620A57062007B3B65 /* pop.wav in Resources */,
+				71D6F28420A57062007B3B65 /* sprites.atlas in Resources */,
+				71D6F29220A57062007B3B65 /* ding.wav in Resources */,
+				71D6F29420A57062007B3B65 /* flapping.wav in Resources */,
 				71B75CA520A525FB002A82E7 /* LaunchScreen.storyboard in Resources */,
+				71D6F29320A57062007B3B65 /* falling.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +367,7 @@
 				71B75CAB20A525FB002A82E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
