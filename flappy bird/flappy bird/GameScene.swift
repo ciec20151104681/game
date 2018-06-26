@@ -20,6 +20,8 @@ class GameScene: SKScene {
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
+    let k前景地面数 = 2
+    let k地面移动速度 : CGFloat = -150.0
     let k重力: CGFloat = -1500.0
     let k上冲速度: CGFloat = 400.0
     var 速度 = CGPoint.zero
@@ -59,12 +61,14 @@ class GameScene: SKScene {
         
     }
     func 设置前景(){
-        let 前景 = SKSpriteNode(imageNamed: "Ground")
-        前景.anchorPoint = CGPoint(x: 0, y: 1.0)
-        前景.position = CGPoint(x: 0, y: 游戏区域起始点)
-        前景.zPosition = 图层.前景.rawValue
-        世界单位.addChild(前景)
-    
+        for i in 0..<k前景地面数 {
+            let 前景 = SKSpriteNode(imageNamed: "Ground")
+            前景.anchorPoint = CGPoint(x: 0, y: 1.0)
+            前景.position = CGPoint(x: CGFloat(i) * 前景.size.width, y: 游戏区域起始点)
+            前景.zPosition = 图层.前景.rawValue
+            前景.name = "前景"
+            世界单位.addChild(前景)
+        }
     }
     func 主角飞一下(){
         速度 = CGPoint(x: 0, y: k上冲速度)
@@ -83,9 +87,8 @@ class GameScene: SKScene {
             dt = 0
         }
         上一次更新时间 = 当前时间
-        
+        更新前景()
         更新主角()
-    
     }
     func 更新主角() {
         let 加速度 = CGPoint(x: 0, y: k重力)
@@ -95,5 +98,18 @@ class GameScene: SKScene {
             主角.position = CGPoint(x: 主角.position.x, y: 游戏区域起始点 + 主角.size.height/2)
         }
     }
-    
+   func 更新前景() {
+        世界单位.enumerateChildNodes(withName: "前景") { 匹配单位, _ in
+            if let 前景 = 匹配单位 as? SKSpriteNode {
+                let 地面移动速度 = CGPoint(x: self.k地面移动速度, y: 0)
+                前景.position.x += 地面移动速度.x * CGFloat(self.dt)
+                /*if 前景.position.x < -前景.size.width {
+                    前景.position.x += CGPoint(x: 前景.size.width *
+                        CGFloat(self.k前景地面数), y: 0)*/
+                }
+            }
+    }
 }
+
+
+
