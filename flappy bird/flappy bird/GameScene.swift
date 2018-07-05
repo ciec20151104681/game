@@ -22,7 +22,7 @@ class GameScene: SKScene {
     private var spinnyNode : SKShapeNode?
     
     let k前景地面数 = 2
-    let k地面移动速度 : CGFloat = -150.0
+    let k地面移动速度 :CGFloat = -150.0
     let k重力: CGFloat = -1500.0
     let k上冲速度: CGFloat = 400.0
     let k底部障碍最小乘数 : CGFloat = 0.1
@@ -87,11 +87,11 @@ class GameScene: SKScene {
         let 起始X坐标 = size.width + 底部障碍.size.width/2
         let Y坐标最小值 = (游戏区域起始点 - 底部障碍.size.height/2) + 游戏区域的高度 * k底部障碍最小乘数
         let Y坐标最大值 = (游戏区域起始点 - 底部障碍.size.height/2) + 游戏区域的高度 * k底部障碍最大乘数
-        底部障碍.position = CGPoint(x: 起始X坐标, y: CGFloat.minimumMagnitude(CGFloat.init(Y坐标最小值), CGFloat.init(Y坐标最大值)))
+        底部障碍.position = CGPoint(x: 起始X坐标, y: CGFloat.random(min: Y坐标最小值, max: Y坐标最大值))
         底部障碍.name = "底部障碍"
         世界单位.addChild(底部障碍)
         let 顶部障碍 = 创建障碍物("CactusTop")
-        顶部障碍.zRotation = CGFloat(180).degreesToRadians()
+        /*顶部障碍.zRotation = CGFloat(180).degreesToRadians()*/
         顶部障碍.position = CGPoint(x: 起始X坐标, y: 底部障碍.position.y + 底部障碍.size.height/2 + 顶部障碍.size.height/2 + 主角.size.height * k缺口乘数)
         顶部障碍.name = "顶部障碍"
         世界单位.addChild(顶部障碍)
@@ -124,8 +124,8 @@ class GameScene: SKScene {
             dt = 0
         }
         上一次更新时间 = 当前时间
-        更新前景()
         更新主角()
+        更新前景()
     }
     func 更新主角() {
         let 加速度 = CGPoint(x: 0, y: k重力)
@@ -136,18 +136,17 @@ class GameScene: SKScene {
         }
     }
     func 更新前景() {
-        世界单位.enumerateChildNodes(withName: "前景") { 匹配单位, _ in
-            if let 前景 = 匹配单位 as? SKSpriteNode {
+        世界单位.enumerateChildNodes(withName: "前景", using: { 匹配单位, _ in
+            if let 前景 = 匹配单位 as? SKSpriteNode{
                 let 地面移动速度 = CGPoint(x: self.k地面移动速度, y: 0)
                 前景.position.x += 地面移动速度.x * CGFloat(self.dt)
-                if 前景.position.x < -前景.size.width {
-                 前景.position.x += CGPoint(x: 前景.size.width *
-                 CGFloat(self.k前景地面数), y: 0)
-                }
                 
+                /*if 前景.position.x < -前景.size.width {
+                    前景.position += CGPoint(x: 前景.size.width * CGFloat(self.k前景地面数), y: 0)
+                }*/
             }
-        }
-    }
+        })
+}
 
 
 
