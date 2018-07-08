@@ -365,5 +365,62 @@ class GameScene: SKScene {
             }
         })
     }
+    func 切换到主菜单(){
+        当前游戏状态 = .主菜单
+        设置背景()
+        设置前景()
+        设置主角()
+        设置帽子()
+        设置主菜单()
+    }
+    func 切换到教程状态(){
+        当前游戏状态 = .教程
+        世界单位.enumerateChildNodesWithName("主菜单") { 匹配单位,_ in
+            匹配单位.runAction(SKAction.sequence([
+                SKAction.fadeOutWithDuration(0.05),
+                SKAction.removeFromParent()
+                ]))
+        }
+        设置得分标签()
+        设置教程()
+    }
+    
+    func 切换到游戏状态(){
+        当前游戏状态 = .游戏
+        世界单位.enumerateChildNodesWithName("教程") { 匹配单位,_ in
+            匹配单位.runAction(SKAction.sequence([
+                SKAction.fadeOutWithDuration(0.05),
+                SKAction.removeFromParent()
+                ]))
+        }
+        无限重生障碍()
+        主角飞一下()
+    }
+    
+    func 切换到跌落状态(){
+        当前游戏状态 = .跌落
+        runAction(SKAction.sequence([
+            摔倒的音效,
+            SKAction.waitForDuration(0.1),
+            下落的音效
+            ]))
+        主角.removeAllActions()
+        停止重生障碍()
+    }
+    
+    func 切换到显示分数状态(){
+        当前游戏状态 = .显示分数
+        主角.removeAllActions()
+        停止重生障碍()
+        设置记分板()
+    }
+    
+    func 切换到新游戏(){
+        runAction(砰的音效)
+        let 新的游戏场景 = GameScene.init(size:size)
+        let 切换特效 = SKTransition.fadeWithColor(SKColor.blackColor(), duration: 0.05)
+        view?.presentScene(新的游戏场景,transition: 切换特效)
+    }
+
 }
 
