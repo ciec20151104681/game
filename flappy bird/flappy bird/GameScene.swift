@@ -87,7 +87,7 @@ class GameScene: SKScene {
         let 起始X坐标 = size.width + 底部障碍.size.width/2
         let Y坐标最小值 = (游戏区域起始点 - 底部障碍.size.height/2) + 游戏区域的高度 * k底部障碍最小乘数
         let Y坐标最大值 = (游戏区域起始点 - 底部障碍.size.height/2) + 游戏区域的高度 * k底部障碍最大乘数
-        底部障碍.position = CGPoint(x: 起始X坐标, y: CGFloat.random(min: Y坐标最小值, max: Y坐标最大值))
+        底部障碍.position = CGPointMake(起始X坐标, CGFloat.random(min: Y坐标最小值,max: Y坐标最大值))
         底部障碍.name = "底部障碍"
         世界单位.addChild(底部障碍)
         let 顶部障碍 = 创建障碍物("CactusTop")
@@ -105,6 +105,26 @@ class GameScene: SKScene {
         顶部障碍.run(移动的动作队列)
         底部障碍.run(移动的动作队列)
         
+    }
+    func 无限重生障碍(){
+        let 首次延迟 = SKAction.waitForDuration(k首次生成障碍延迟)
+        let 重生障碍 = SKAction.runBlock(生成障碍)
+        let 每次重生间隔 = SKAction.waitForDuration(k每次重生障碍延迟)
+        let 重生的动作队列 = SKAction.sequence([重生障碍, 每次重生间隔])
+        let 无限重生 = SKAction.repeatActionForever(重生的动作队列)
+        let 总的动作队列 = SKAction.sequence([首次延迟, 无限重生])
+        runAction(总的动作队列,withKey: "重生")
+    }
+    
+    func  停止重生障碍(){
+        removeActionForKey("重生")
+        
+        世界单位.enumerateChildNodesWithName("顶部障碍", usingBlock: { 匹配单位, _ in
+            匹配单位.removeAllActions()
+        })
+        世界单位.enumerateChildNodesWithName("底部障碍", usingBlock: { 匹配单位, _ in
+            匹配单位.removeAllActions()
+        })
     }
 
     func 主角飞一下(){
@@ -124,8 +144,27 @@ class GameScene: SKScene {
             dt = 0
         }
         上一次更新时间 = 当前时间
-        更新主角()
-        更新前景()
+        switch 当前游戏状态 {
+        case .主菜单:
+            break
+        case .教程:
+            break
+        case .游戏:
+            更新前景()
+            更新主角()
+            撞击障碍物检查()
+            撞击地面检查()
+            更新得分()
+            break
+        case .跌落:
+            更新主角()
+            撞击地面检查()
+            break
+        case .显示分数:
+            break
+        case .结束:
+            break
+        }
     }
     func 更新主角() {
         let 加速度 = CGPoint(x: 0, y: k重力)
