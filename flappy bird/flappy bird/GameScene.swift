@@ -80,6 +80,40 @@ class GameScene: SKScene {
         切换到主菜单()
         
     }
+    func 设置主菜单(){
+        //logo
+        let logo = SKSpriteNode(imageNamed: "Logo")
+        logo.position = CGPoint(x:size.width/2,y:size.height * 0.8)
+        logo.name = "主菜单"
+        logo.zPosition = 图层.UI.rawValue
+        世界单位.addChild(logo)
+        //开始游戏按钮
+        let 开始游戏按钮 = SKSpriteNode(imageNamed: "Button")
+        开始游戏按钮.position = CGPoint(x:size.width * 0.5,y:size.height * 0.25)
+        开始游戏按钮.name = "主菜单"
+        开始游戏按钮.zPosition = 图层.UI.rawValue
+        世界单位.addChild(开始游戏按钮)
+        
+        let 游戏 = SKSpriteNode(imageNamed: "Play")
+        游戏.position = CGPoint.zero
+        开始游戏按钮.addChild(游戏)
+        
+    }
+    func 设置教程(){
+        let 教程 = SKSpriteNode(imageNamed: "Tutorial")
+        教程.position = CGPoint(x: size.width * 0.5 , y: 游戏区域的高度 * 0.4 + 游戏区域起始点)
+        教程.name = "教程"
+        教程.zPosition = 图层.UI.rawValue
+        世界单位.addChild(教程)
+        
+        let 准备 = SKSpriteNode(imageNamed: "Ready")
+        准备.position = CGPoint(x: size.width * 0.5, y: 游戏区域的高度 * 0.7 + 游戏区域起始点)
+        准备.name = "教程"
+        准备.zPosition = 图层.UI.rawValue
+        世界单位.addChild(准备)
+        
+    }
+
     func 设置背景() {
         let 背景 = SKSpriteNode(imageNamed: "Background")
         背景.anchorPoint = CGPoint(x: 0.5, y: 1.0)
@@ -136,6 +170,62 @@ class GameScene: SKScene {
         障碍物.zPosition = 图层.障碍物.rawValue
         障碍物.userData = NSMutableDictionary()
         return 障碍物
+    }
+    func 设置记分板(){
+        if 当前分数 > 最高分(){
+            设置最高分(当前分数)
+        }
+        let 记分板 = SKSpriteNode(imageNamed: "ScoreCard")
+        记分板.position = CGPoint(x:size.width/2,y:size.height/2)
+        记分板.zPosition = 图层.UI.rawValue
+        世界单位.addChild(记分板)
+        let 当前分数标签 = SKLabelNode(fontNamed: k字体名字)
+        当前分数标签.fontColor = SKColor(red: 11.2, green: 22.2, blue: 0.234, alpha: 29.1)
+        当前分数标签.position = CGPoint(x: -记分板.size.width/4,y:-记分板.size.height/3)
+        当前分数标签.text = "\(当前分数)"
+        当前分数标签.zPosition = 图层.UI.rawValue
+        记分板.addChild(当前分数标签)
+        let 最高分标签 = SKLabelNode(fontNamed: k字体名字)
+        最高分标签.fontColor = SKColor(red: 101.0/255.0, green: 71.0/255.0, blue: 73.0/255.0, alpha: 1.0)
+        最高分标签.position = CGPoint(x: 记分板.size.width/4,y:-记分板.size.height/3)
+        最高分标签.text = "\(最高分())"
+        最高分标签.zPosition = 图层.UI.rawValue
+        记分板.addChild(最高分标签)
+        let 游戏结束 = SKSpriteNode(imageNamed:"GameOver")
+        游戏结束.position = CGPoint(x:size.width/2,y:size.height/2 + 记分板.size.height/2 + k顶部留白 + 游戏结束.size.height/2)
+        游戏结束.zPosition = 图层.UI.rawValue
+        世界单位.addChild(游戏结束)
+        let ok按钮 = SKSpriteNode(imageNamed: "Button")
+        ok按钮.position = CGPoint(x:size.width/2,y:size.height/2 - 记分板.size.height/2 - k顶部留白 - ok按钮.size.height/2)
+        ok按钮.zPosition = 图层.UI.rawValue
+        世界单位.addChild(ok按钮)
+        
+        let ok = SKSpriteNode(imageNamed: "OK")
+        ok.position = CGPoint.zero
+        ok.zPosition = 图层.UI.rawValue
+        ok按钮.addChild(ok)
+        
+        let 声音特效 = SKAction.sequence([
+            SKAction.waitForDuration(k动画延迟),
+            砰的音效,
+            SKAction.waitForDuration(k动画延迟),
+            砰的音效,
+            SKAction.waitForDuration(k动画延迟),
+            砰的音效,
+            SKAction.runBlock(切换到结束状态)
+            ])
+        
+        runAction(声音特效)
+        
+    }
+    func 设置得分标签() {
+        得分标签 = SKLabelNode(fontNamed:k字体名字)
+        得分标签.fontColor = SKColor(red: 101.0/255.0, green: 71.0/255.0, blue: 73.0/255.0, alpha: 1.0)
+        得分标签.position = CGPoint(x:size.width/2,y:size.height - k顶部留白)
+        得分标签.verticalAlignmentMode = .Top
+        得分标签.text = "0"
+        得分标签.zPosition = 图层.UI.rawValue
+        世界单位.addChild(得分标签)
     }
     func 生成障碍() {
         
