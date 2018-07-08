@@ -132,6 +132,11 @@ class GameScene: SKScene {
         self.physicsBody?.collisionBitMask = 0
         self.physicsBody?.contactTestBitMask = 物理层.游戏角色
     }
+    func 设置帽子() {
+        
+        帽子.position = CGPoint(x: 31 - 帽子.size.width/2, y: 29 - 帽子.size.height/2)
+        主角.addChild(帽子)
+    }
     func 设置主角(){
         主角.position = CGPoint(x:size.width * 0.2,y:游戏区域的高度 * 0.4 + 游戏区域起始点)
         主角.zPosition = 图层.游戏角色.rawValue
@@ -227,6 +232,32 @@ class GameScene: SKScene {
         得分标签.zPosition = 图层.UI.rawValue
         世界单位.addChild(得分标签)
     }
+    func 创建障碍物(photo:String)->SKSpriteNode{
+        let 障碍物 = SKSpriteNode(imageNamed: photo)
+        障碍物.zPosition = 图层.障碍物.rawValue
+        障碍物.userData = NSMutableDictionary()
+        
+        
+        
+        let offsetX = 障碍物.size.width * 障碍物.anchorPoint.x
+        let offsetY = 障碍物.size.height * 障碍物.anchorPoint.y
+        
+        let path = CGPathCreateMutable()
+        
+        CGPathMoveToPoint(path, nil, 4 - offsetX, 0 - offsetY)
+        CGPathAddLineToPoint(path, nil, 7 - offsetX, 307 - offsetY)
+        CGPathAddLineToPoint(path, nil, 47 - offsetX, 308 - offsetY)
+        CGPathAddLineToPoint(path, nil, 48 - offsetX, 1 - offsetY)
+        
+        CGPathCloseSubpath(path)
+        
+        障碍物.physicsBody = SKPhysicsBody(polygonFromPath: path)
+        障碍物.physicsBody?.categoryBitMask = 物理层.障碍物
+        障碍物.physicsBody?.collisionBitMask = 0
+        障碍物.physicsBody?.contactTestBitMask = 物理层.游戏角色
+        
+        return 障碍物
+    }
     func 生成障碍() {
         
         let 底部障碍 = 创建障碍物("CactusBottom")
@@ -279,6 +310,34 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         run(拍打的音效)
         主角飞一下()
+    }
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        guard let 点击  = touches.first else{
+            return
+        }
+        let 点击位置 = 点击.locationInNode(self)
+        
+        switch 当前游戏状态{
+        case .主菜单:
+            if 点击位置.y > size.height * 0.15{
+                切换到教程状态()
+            }
+            break
+        case .教程:
+            切换到游戏状态()
+            break
+        case .游戏:
+            主角飞一下()
+            break
+        case .跌落:
+            break
+        case .显示分数:
+            break
+        case .结束:
+            切换到新游戏()
+            break
+            
+        }
     }
   
 
@@ -420,6 +479,28 @@ class GameScene: SKScene {
         let 新的游戏场景 = GameScene.init(size:size)
         let 切换特效 = SKTransition.fadeWithColor(SKColor.blackColor(), duration: 0.05)
         view?.presentScene(新的游戏场景,transition: 切换特效)
+    }
+    func 切换到结束状态(){
+        当前游戏状态 = .结束
+    }
+    
+    func 最高分() -> Int {
+        return NSUserDefaults.standardUserDefaults().integerForKey("最高分")
+    }
+    func 设置最高分(最高分:Int) {
+        NSUserDefaults.standardUserDefaults().setInteger(最高分, forKey: "最高分")
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    //碰撞双方判断
+    func didBeginContact(碰撞双方: SKPhysicsContact) {
+        let 被撞对象 = 碰撞双方.bodyA.categoryBitMask ==  物理层.游戏角色  ? 碰撞双方.bodyB : 碰撞双方.bodyA
+        if 被撞对象.categoryBitMask == 物理层.地面{
+            撞击了地面 = true
+        }
+        if 被撞对象.categoryBitMask == 物理层.障碍物{
+            撞击了障碍物 = true
+        }
     }
 
 }
