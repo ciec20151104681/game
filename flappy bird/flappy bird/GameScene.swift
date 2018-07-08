@@ -15,6 +15,21 @@ enum 图层: CGFloat {
     case 障碍物
     case 前景
     case 游戏角色
+    case UI
+}
+enum 游戏状态 {
+    case 主菜单
+    case 教程
+    case 游戏
+    case 跌落
+    case 显示分数
+    case 结束
+}
+struct 物理层 {
+    static let 无: UInt32 = 0
+    static let 游戏角色: UInt32 = 0b1  // 二进制：1
+    static let 障碍物: UInt32  = 0b10  // 二进制：2
+    static let 地面: UInt32   = 0b100  // 二进制：4
 }
 class GameScene: SKScene {
     
@@ -22,31 +37,47 @@ class GameScene: SKScene {
     private var spinnyNode : SKShapeNode?
     
     let k前景地面数 = 2
-    let k地面移动速度 :CGFloat = -150.0
-    let k重力: CGFloat = -1500.0
-    let k上冲速度: CGFloat = 400.0
-    let k底部障碍最小乘数 : CGFloat = 0.1
-    let k底部障碍最大乘数 : CGFloat = 0.6
-    let k缺口乘数 : CGFloat = 3.5
+    let k地面移动速度:CGFloat = -150.0
+    let k重力:CGFloat = -1100.0
+    let k上冲速度:CGFloat = 400.0
     var 速度 = CGPoint.zero
+    let k底部障碍最小乘数:CGFloat = 0.1
+    let k底部障碍最大乘数:CGFloat = 0.6
+    let k缺口乘数:CGFloat = 5
+    let k首次生成障碍延迟:NSTimeInterval = 2
+    let k每次重生障碍延迟:NSTimeInterval = 1.5
+    let k顶部留白:CGFloat = 20.0
+    let k字体名字 = "AmericanTypewriter-Bold"
+    var 得分标签:SKLabelNode!
+    var 当前分数 = 0
+    let k动画延迟 = 0.3
+    var 撞击了地面 = false
+    var 撞击了障碍物 = false
+    var 当前游戏状态: 游戏状态 = .游戏
     let 世界单位 = SKNode()
+    let 帽子 = SKSpriteNode(imageNamed: "Sombrero")
     var 游戏区域起始点: CGFloat = 0
     var 游戏区域的高度: CGFloat = 0
     let 主角 = SKSpriteNode(imageNamed: "Bird0")
-    var 上一次更新时间: TimeInterval = 0
-    var dt: TimeInterval = 0
+    var 上一次更新时间:NSTimeInterval = 0
+    var dt:NSTimeInterval = 0
     
-    
+    let 叮的音效 = SKAction.playSoundFileNamed("ding.wav", waitForCompletion: false)
     let 拍打的音效 = SKAction.playSoundFileNamed("flapping.wav", waitForCompletion: false)
-    
-    
+    let 摔倒的音效 = SKAction.playSoundFileNamed("whack.wav", waitForCompletion: false)
+    let 下落的音效 = SKAction.playSoundFileNamed("falling.wav", waitForCompletion: false)
+    let 撞击地面的音效 = SKAction.playSoundFileNamed("hitGround.wav", waitForCompletion: false)
+    let 砰的音效 = SKAction.playSoundFileNamed("pop.wav", waitForCompletion: false)
+    let 得分的音效 = SKAction.playSoundFileNamed("coin.wav", waitForCompletion: false)
     
     override func didMove(to view: SKView) {
+        //关掉重力
+        physicsWorld.gravity = CGVectorMake(0, 0)
+        //设置物理碰撞
+        physicsWorld.contactDelegate = self
+        
         addChild(世界单位)
-        设置背景()
-        设置前景()
-        设置主角()
-        生成障碍()
+        切换到主菜单()
         
     }
     func 设置背景() {
@@ -174,7 +205,7 @@ class GameScene: SKScene {
             主角.position = CGPoint(x: 主角.position.x, y: 游戏区域起始点 + 主角.size.height/2)
         }
     }
-    func 更新前景()
+    func 更新前景(){
         世界单位.enumerateChildNodes(withName: "前景", using: { 匹配单位, _ in
             if let 前景 = 匹配单位 as? SKSpriteNode{
                 let 地面移动速度 = CGPoint(x: self.k地面移动速度, y: 0)
@@ -186,4 +217,38 @@ class GameScene: SKScene {
             }
         })
 }
+    func 撞击障碍物检查(){
+        if 撞击了障碍物 {
+            撞击了障碍物 = false
+            切换到跌落状态()
+        }
+    }
+    func 撞击地面检查(){
+        if 撞击了地面{
+            撞击了地面 = false
+            速度 = CGPoint.zero
+            主角.zRotation = CGFloat(-90).degreesToRadians()
+            主角.position = CGPoint(x:主角.position.x,y:游戏区域起始点 + 主角.size.width/2)
+            runAction(撞击地面的音效)
+            切换到显示分数状态()
+        }
+    }
+    func 更新得分(){
+        世界单位.enumerateChildNodesWithName("顶部障碍", usingBlock: { 匹配单位, _ in
+            if let 障碍物 = 匹配单位 as? SKSpriteNode{
+                if let 已通过 = 障碍物.userData?["已通过"] as? NSNumber{
+                    if 已通过.boolValue{
+                        return
+                    }
+                }
+                if self.主角.position.x > 障碍物.position.x + 障碍物.size.width/2{
+                    self.当前分数 = self.当前分数 + 1
+                    self.得分标签.text = "\(self.当前分数)"
+                    self.runAction(self.得分的音效)
+                    障碍物.userData?["已通过"] = NSNumber(bool:true)
+                }
+            }
+        })
+    }
 }
+
