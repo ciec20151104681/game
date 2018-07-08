@@ -82,19 +82,44 @@ class GameScene: SKScene {
     }
     func 设置背景() {
         let 背景 = SKSpriteNode(imageNamed: "Background")
-        背景.anchorPoint = CGPoint(x: 0.5,y: 1.0)
+        背景.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         背景.position = CGPoint(x: size.width/2, y: size.height)
         背景.zPosition = 图层.背景.rawValue
         世界单位.addChild(背景)
+        
         游戏区域起始点 = size.height - 背景.size.height
         游戏区域的高度 = 背景.size.height
+        
+        let 左下 = CGPoint(x: 0, y: 游戏区域起始点)
+        let 右下 = CGPoint(x: size.width, y: 游戏区域起始点)
+        
+        self.physicsBody = SKPhysicsBody(edgeFromPoint: 左下, toPoint: 右下)
+        self.physicsBody?.categoryBitMask = 物理层.地面
+        self.physicsBody?.collisionBitMask = 0
+        self.physicsBody?.contactTestBitMask = 物理层.游戏角色
     }
     func 设置主角(){
-        主角.position = CGPoint(x: size.width * 0.2, y: 游戏区域的高度 * 0.4 + 游戏区域起始点)
+        主角.position = CGPoint(x:size.width * 0.2,y:游戏区域的高度 * 0.4 + 游戏区域起始点)
         主角.zPosition = 图层.游戏角色.rawValue
+        
+        let offsetX = 主角.size.width * 主角.anchorPoint.x
+        let offsetY = 主角.size.height * 主角.anchorPoint.y
+        let path = CGPathCreateMutable()
+        CGPathMoveToPoint(path, nil, 3 - offsetX, 12 - offsetY)
+        CGPathAddLineToPoint(path, nil, 18 - offsetX, 22 - offsetY)
+        CGPathAddLineToPoint(path, nil, 28 - offsetX, 27 - offsetY)
+        CGPathAddLineToPoint(path, nil, 39 - offsetX, 23 - offsetY)
+        CGPathAddLineToPoint(path, nil, 39 - offsetX, 9 - offsetY)
+        CGPathAddLineToPoint(path, nil, 25 - offsetX, 4 - offsetY)
+        CGPathAddLineToPoint(path, nil, 5 - offsetX, 2 - offsetY)
+        
+        CGPathCloseSubpath(path)
+        
+        主角.physicsBody = SKPhysicsBody(polygonFromPath: path)
+        主角.physicsBody?.categoryBitMask = 物理层.游戏角色
+        主角.physicsBody?.collisionBitMask = 0
+        主角.physicsBody?.contactTestBitMask = 物理层.障碍物 | 物理层.地面
         世界单位.addChild(主角)
-        
-        
     }
     func 设置前景(){
         for i in 0..<k前景地面数 {
