@@ -135,7 +135,7 @@ class GameScene: SKScene {
             主角.position = CGPoint(x: 主角.position.x, y: 游戏区域起始点 + 主角.size.height/2)
         }
     }
-    func 更新前景() {
+    func 更新前景()
         世界单位.enumerateChildNodes(withName: "前景", using: { 匹配单位, _ in
             if let 前景 = 匹配单位 as? SKSpriteNode{
                 let 地面移动速度 = CGPoint(x: self.k地面移动速度, y: 0)
@@ -147,7 +147,4 @@ class GameScene: SKScene {
             }
         })
 }
-
-
-
 }
